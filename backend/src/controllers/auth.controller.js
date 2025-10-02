@@ -33,6 +33,7 @@ export const register = async (req, res) => {
                 fullName: newUser.fullName,
                 email: newUser.email,
                 profilePic: newUser.profilePic,
+                message:"User created successfully"
             });
         } else {
             res.status(400).json({ message: "Invalid user data" });

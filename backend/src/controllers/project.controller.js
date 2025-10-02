@@ -22,7 +22,28 @@ export const createProject = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-export const getProject = async (req, res) => {
+export const getAllProjects = async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const projects = await Project.find({
+            $or: [{ owner: user._id }, { members: user._id }]
+        })
+        res.status(200).json({
+            success: true,
+            count: projects.length,
+            projects
+        });
+
+
+    } catch (error) {
+        console.log("Error in getAllProjects controller", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+export const getProjectbyId = async (req, res) => {
     try {
         const project = await req.project
             .populate('owner', 'username email avatarUrl')
